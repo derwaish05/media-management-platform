@@ -1,0 +1,359 @@
+/* ==========================================================================
+   MMP Document Library — frontend stylesheet (S41)
+   Loaded only when the [mmp_documents] shortcode is present on the page.
+   ========================================================================== */
+
+/* ── Container ────────────────────────────────────────────────────────────── */
+.mmp-doc-library {
+    --mmp-dl-radius: 6px;
+    --mmp-dl-border: #e2e8f0;
+    --mmp-dl-bg: #ffffff;
+    --mmp-dl-row-hover: #f8fafc;
+    --mmp-dl-text: #1e293b;
+    --mmp-dl-muted: #64748b;
+    --mmp-dl-accent: #3b82f6;
+    --mmp-dl-accent-hover: #2563eb;
+    --mmp-dl-icon-pdf: #ef4444;
+    --mmp-dl-icon-doc: #3b82f6;
+    --mmp-dl-icon-sheet: #22c55e;
+    --mmp-dl-icon-ppt: #f97316;
+    --mmp-dl-icon-archive: #a855f7;
+    --mmp-dl-icon-audio: #ec4899;
+    --mmp-dl-icon-video: #6366f1;
+    --mmp-dl-icon-image: #14b8a6;
+    --mmp-dl-icon-text: #78716c;
+    --mmp-dl-icon-file: #94a3b8;
+
+    font-family: inherit;
+    color: var(--mmp-dl-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.mmp-doclib-notice {
+    color: var(--mmp-dl-muted);
+    font-style: italic;
+    padding: 1rem 0;
+}
+
+/* ── Breadcrumb ───────────────────────────────────────────────────────────── */
+.mmp-doclib__breadcrumb {
+    margin-bottom: 1rem;
+}
+
+.mmp-doclib__crumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mmp-doclib__crumb {
+    display: flex;
+    align-items: center;
+}
+
+.mmp-doclib__crumb:not(:last-child)::after {
+    content: "/";
+    color: var(--mmp-dl-muted);
+    margin-left: 0.25rem;
+    pointer-events: none;
+}
+
+.mmp-doclib__crumb-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--mmp-dl-accent);
+    font-size: inherit;
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.mmp-doclib__crumb-btn:hover {
+    color: var(--mmp-dl-accent-hover);
+}
+
+.mmp-doclib__crumb--current {
+    color: var(--mmp-dl-muted);
+}
+
+/* ── Subfolders grid ─────────────────────────────────────────────────────── */
+.mmp-doclib__subfolders {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.mmp-doclib__subfolder {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    background: var(--mmp-dl-bg);
+    border: 1px solid var(--mmp-dl-border);
+    border-radius: var(--mmp-dl-radius);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--mmp-dl-text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.mmp-doclib__subfolder:hover {
+    border-color: var(--mmp-dl-accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.mmp-doclib__subfolder-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.mmp-doclib__subfolder-count {
+    color: var(--mmp-dl-muted);
+    font-size: 0.8rem;
+}
+
+/* ── Loading overlay ─────────────────────────────────────────────────────── */
+.mmp-doclib__body {
+    transition: opacity 0.15s;
+}
+
+.mmp-doclib__body--loading {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+/* ── File table ──────────────────────────────────────────────────────────── */
+.mmp-doclib__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--mmp-dl-border);
+    border-radius: var(--mmp-dl-radius);
+}
+
+.mmp-doclib__table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--mmp-dl-bg);
+}
+
+.mmp-doclib__table thead {
+    background: #f1f5f9;
+}
+
+.mmp-doclib__table th {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mmp-dl-muted);
+    border-bottom: 1px solid var(--mmp-dl-border);
+    white-space: nowrap;
+}
+
+.mmp-doclib__table td {
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--mmp-dl-border);
+    vertical-align: middle;
+}
+
+.mmp-doclib__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.mmp-doclib__table tbody tr:hover td {
+    background: var(--mmp-dl-row-hover);
+}
+
+/* Column widths */
+.mmp-doclib__col-icon { width: 2.25rem; padding-right: 0; }
+.mmp-doclib__col-name { width: auto; }
+.mmp-doclib__col-size { width: 6rem; white-space: nowrap; }
+.mmp-doclib__col-date { width: 7rem; white-space: nowrap; color: var(--mmp-dl-muted); font-size: 0.85rem; }
+.mmp-doclib__col-dl   { width: 6.5rem; text-align: right; }
+
+.mmp-doclib__filename {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+/* ── File icons ──────────────────────────────────────────────────────────── */
+.mmp-doclib__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.mmp-doclib__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mmp-doclib__icon--pdf     { color: var(--mmp-dl-icon-pdf);     }
+.mmp-doclib__icon--doc     { color: var(--mmp-dl-icon-doc);     }
+.mmp-doclib__icon--sheet   { color: var(--mmp-dl-icon-sheet);   }
+.mmp-doclib__icon--ppt     { color: var(--mmp-dl-icon-ppt);     }
+.mmp-doclib__icon--archive { color: var(--mmp-dl-icon-archive); }
+.mmp-doclib__icon--audio   { color: var(--mmp-dl-icon-audio);   }
+.mmp-doclib__icon--video   { color: var(--mmp-dl-icon-video);   }
+.mmp-doclib__icon--image   { color: var(--mmp-dl-icon-image);   }
+.mmp-doclib__icon--text    { color: var(--mmp-dl-icon-text);    }
+.mmp-doclib__icon--file    { color: var(--mmp-dl-icon-file);    }
+
+/* ── Download button ─────────────────────────────────────────────────────── */
+.mmp-doclib__download {
+    display: inline-block;
+    padding: 0.3rem 0.65rem;
+    background: var(--mmp-dl-accent);
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+.mmp-doclib__download:hover,
+.mmp-doclib__download:focus {
+    background: var(--mmp-dl-accent-hover);
+    color: #ffffff;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.mmp-doclib__empty {
+    color: var(--mmp-dl-muted);
+    text-align: center;
+    padding: 2rem 1rem;
+    font-style: italic;
+    border: 1px solid var(--mmp-dl-border);
+    border-radius: var(--mmp-dl-radius);
+    margin: 0;
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
+.mmp-doclib__pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.mmp-doclib__pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mmp-doclib__page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.4rem;
+    background: var(--mmp-dl-bg);
+    border: 1px solid var(--mmp-dl-border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--mmp-dl-text);
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.mmp-doclib__page-btn:hover {
+    border-color: var(--mmp-dl-accent);
+    color: var(--mmp-dl-accent);
+}
+
+.mmp-doclib__page-btn--current {
+    background: var(--mmp-dl-accent);
+    border-color: var(--mmp-dl-accent);
+    color: #ffffff;
+    cursor: default;
+    font-weight: 600;
+}
+
+.mmp-doclib__page-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    color: var(--mmp-dl-muted);
+}
+
+.mmp-doclib__total {
+    color: var(--mmp-dl-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ── Responsive — stack table on narrow viewports ────────────────────────── */
+@media (max-width: 600px) {
+    .mmp-doclib__table-wrap { border: none; }
+
+    .mmp-doclib__table thead { display: none; }
+
+    .mmp-doclib__table,
+    .mmp-doclib__table tbody,
+    .mmp-doclib__table tr,
+    .mmp-doclib__table td {
+        display: block;
+    }
+
+    .mmp-doclib__table tr {
+        border: 1px solid var(--mmp-dl-border);
+        border-radius: var(--mmp-dl-radius);
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .mmp-doclib__table td {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: none;
+        padding: 0.3rem 0;
+        font-size: 0.875rem;
+    }
+
+    .mmp-doclib__table td::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        font-size: 0.78rem;
+        color: var(--mmp-dl-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        min-width: 4rem;
+    }
+
+    /* Icon cell — no label needed */
+    .mmp-doclib__col-icon::before { display: none; }
+    .mmp-doclib__col-dl::before   { display: none; }
+
+    .mmp-doclib__col-dl {
+        justify-content: flex-start;
+        text-align: left;
+    }
+}

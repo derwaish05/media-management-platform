@@ -1,0 +1,233 @@
+/**
+ * MMP Gallery block — frontend styles.
+ *
+ * Loaded only when the mmp/gallery block is present on the page via the
+ * 'style' handle registered in GalleryBlock::registerBlock().
+ *
+ * CSS custom properties (set via inline style on the wrapper):
+ *   --mmp-columns   number of columns (default 3)
+ *   --mmp-gap       gap between items (default 16px)
+ */
+
+/* ---------------------------------------------------------------------------
+   Wrapper
+--------------------------------------------------------------------------- */
+
+.mmp-gallery {
+    --mmp-columns: 3;
+    --mmp-gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Grid layout
+--------------------------------------------------------------------------- */
+
+.mmp-gallery--grid {
+    display: grid;
+    grid-template-columns: repeat(var(--mmp-columns), 1fr);
+    gap: var(--mmp-gap);
+}
+
+/* ---------------------------------------------------------------------------
+   Masonry layout (CSS multi-column)
+--------------------------------------------------------------------------- */
+
+.mmp-gallery--masonry {
+    columns: var(--mmp-columns);
+    column-gap: var(--mmp-gap);
+}
+
+.mmp-gallery--masonry .mmp-gallery__item {
+    break-inside: avoid;
+    margin-bottom: var(--mmp-gap);
+}
+
+/* ---------------------------------------------------------------------------
+   Flex layout
+--------------------------------------------------------------------------- */
+
+.mmp-gallery--flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--mmp-gap);
+}
+
+.mmp-gallery--flex .mmp-gallery__item {
+    flex: 1 1 calc(100% / var(--mmp-columns) - var(--mmp-gap));
+    min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Carousel layout
+--------------------------------------------------------------------------- */
+
+.mmp-gallery--carousel {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.mmp-carousel__viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.mmp-carousel__track {
+    display: flex;
+    gap: var(--mmp-gap);
+    transition: transform 0.35s ease;
+    will-change: transform;
+}
+
+.mmp-gallery--carousel .mmp-gallery__item--slide {
+    flex: 0 0 calc(
+        (100% - (var(--mmp-columns) - 1) * var(--mmp-gap)) / var(--mmp-columns)
+    );
+    min-width: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 4px;
+    line-height: 0;
+}
+
+.mmp-gallery--carousel .mmp-gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation buttons */
+
+.mmp-carousel__btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    padding: 0;
+}
+
+.mmp-carousel__btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+.mmp-carousel__btn--prev {
+    left: 8px;
+}
+
+.mmp-carousel__btn--next {
+    right: 8px;
+}
+
+/* Dot indicators */
+
+.mmp-carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.mmp-carousel__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.mmp-carousel__dot--active {
+    background: #2563eb;
+    transform: scale(1.3);
+}
+
+/* ---------------------------------------------------------------------------
+   Item + image
+--------------------------------------------------------------------------- */
+
+.mmp-gallery__item {
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+    line-height: 0; /* remove inline gap below image */
+}
+
+.mmp-gallery__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+
+.mmp-gallery__item--lightbox {
+    cursor: zoom-in;
+}
+
+.mmp-gallery__item--lightbox:hover .mmp-gallery__img,
+.mmp-gallery__item--lightbox:focus .mmp-gallery__img {
+    transform: scale(1.04);
+}
+
+/* ---------------------------------------------------------------------------
+   Empty state
+--------------------------------------------------------------------------- */
+
+.mmp-gallery-empty {
+    color: #666;
+    font-style: italic;
+    padding: 16px;
+    margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive breakpoints
+--------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .mmp-gallery--grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mmp-gallery--masonry {
+        columns: 2;
+    }
+
+    .mmp-gallery--flex .mmp-gallery__item {
+        flex: 1 1 calc(50% - var(--mmp-gap));
+    }
+}
+
+@media (max-width: 480px) {
+    .mmp-gallery--grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mmp-gallery--masonry {
+        columns: 1;
+    }
+
+    .mmp-gallery--flex .mmp-gallery__item {
+        flex: 1 1 100%;
+    }
+}
