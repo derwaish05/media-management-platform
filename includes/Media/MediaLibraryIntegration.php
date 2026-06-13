@@ -459,7 +459,7 @@ class MediaLibraryIntegration {
             $items = '';
             foreach (array_slice($usage, 0, 10) as $item) {
                 $status = 'publish' === $item['post_status']
-                    ? ' <span style="color:#d63638">●</span>'
+                    ? ' <span style="color:#00a32a" title="' . esc_attr__( 'Live on a published page', 'media-management-platform' ) . '">●</span>'
                     : '';
                 $items .= '<li>'
                     . '<a href="' . esc_url($item['permalink']) . '" target="_blank">'
@@ -533,19 +533,14 @@ class MediaLibraryIntegration {
             return;
         }
 
-        $count     = $this->usageTracker->countUsage($postId);
-        $published = $this->usageTracker->isUsedInPublished($postId);
+        $count = $this->usageTracker->countUsage($postId);
 
         if ($count === 0) {
-            echo '<span style="color:#9ca3af" title="' . esc_attr__('Not used anywhere', 'media-management-platform') . '">—</span>';
+            echo '<span style="color:#d63638;font-weight:600" title="' . esc_attr__('Not used anywhere — safe to review before deleting', 'media-management-platform') . '">⚠ ' . esc_html__('Unused', 'media-management-platform') . '</span>';
             return;
         }
 
-        $icon = $published
-            ? '<span title="' . esc_attr__('Used in published content — deleting may break pages', 'media-management-platform') . '" style="color:#d63638;font-size:16px">⚠</span> '
-            : '';
-
-        echo $icon . '<span title="' . esc_attr__('Usage count', 'media-management-platform') . '">' . (int) $count . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $icon contains trusted hardcoded HTML with escaped attributes
+        echo '<span style="color:#646970" title="' . esc_attr__('Number of places this file is used', 'media-management-platform') . '">' . (int) $count . '</span>';
     }
 
     /**
@@ -556,7 +551,20 @@ class MediaLibraryIntegration {
      * @return array<string, mixed>
      */
     public function filterAjaxUnused(array $query): array {
-        if (empty($query['mmp_unused'])) {
+        // WordPress strips unknown keys from the $query array before this
+        // filter runs, so read the flag straight from the backbone props in
+        // the request (same approach as filterAjaxByFolder()). This is a read
+        // filter on a WP-generated AJAX query, so no nonce of our own applies.
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+        $unused = '';
+        if ( isset( $_POST['query']['mmp_unused'] ) ) {
+            $unused = sanitize_text_field( wp_unslash( $_POST['query']['mmp_unused'] ) );
+        } elseif ( isset( $_GET['mmp_unused'] ) ) {
+            $unused = sanitize_text_field( wp_unslash( $_GET['mmp_unused'] ) );
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+
+        if ('1' !== $unused && 'true' !== $unused) {
             return $query;
         }
 
@@ -951,8 +959,8 @@ class MediaLibraryIntegration {
     });
 
     // -------------------------------------------------------------------------
-    // 7. Usage warning badge — patch wp.media.view.Attachment to show ⚠ icon
-    //    when mmp_used_in_published is true in the attachment model.
+    // 7. Unused-media badge — patch wp.media.view.Attachment to show a ⚠ icon
+    //    when the attachment is not referenced anywhere (mmp_usage_count === 0).
     // -------------------------------------------------------------------------
 
     (function patchAttachmentView() {
@@ -979,10 +987,13 @@ class MediaLibraryIntegration {
             var existing = el.querySelector('.mmp-usage-warning-badge');
             if (existing) existing.remove();
 
-            if (this.model && this.model.get('mmp_used_in_published')) {
+            // Only flag when usage data is loaded AND the count is zero.
+            var usageCount = this.model ? this.model.get('mmp_usage_count') : undefined;
+
+            if (typeof usageCount !== 'undefined' && Number(usageCount) === 0) {
                 var badge = document.createElement('span');
                 badge.className = 'mmp-usage-warning-badge';
-                badge.title     = '<?php echo esc_js(__('Used in published content — deleting may break pages', 'media-management-platform')); ?>';
+                badge.title     = '<?php echo esc_js(__('Not used anywhere — safe to review before deleting', 'media-management-platform')); ?>';
                 badge.textContent = '⚠';
                 el.appendChild(badge);
                 el.classList.add('mmp-has-published-usage');

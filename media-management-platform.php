@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Media Management Platform
- * Plugin URI:        https://brainstudioz.com/media-management-platform
+ * Plugin URI:        https://github.com/derwaish05/media-management-platform
  * Description:       Media OS for WordPress — full media lifecycle from upload to delivery to analytics.
  * Version:           1.0.0
  * Requires at least: 6.4

@@ -360,13 +360,13 @@ class RealFolderSync {
 
         $settingsUrl = admin_url( 'upload.php?page=mmp-filesystem' );
 
-        echo '<div class="notice notice-warning">';
-        echo '<p><strong>MMP Real Filesystem Mode is active.</strong> ';
-        echo 'Files will be physically moved when assigned to folders. ';
-        echo 'Test on staging before enabling on production. ';
-        echo '<a href="' . esc_url( $settingsUrl ) . '">Disable</a>';
-        echo '</p>';
-        echo '</div>';
+        printf(
+            '<div class="notice notice-warning is-dismissible"><p><strong>%1$s</strong> %2$s <a href="%3$s">%4$s</a></p></div>',
+            esc_html__( 'Media Management Platform: Real Filesystem Mode is active.', 'media-management-platform' ),
+            esc_html__( 'Files are physically moved when assigned to folders — test on staging before using in production.', 'media-management-platform' ),
+            esc_url( $settingsUrl ),
+            esc_html__( 'Disable', 'media-management-platform' )
+        );
     }
 
     // -------------------------------------------------------------------------
